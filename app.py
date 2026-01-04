@@ -9,121 +9,147 @@ st.set_page_config(
     page_title="FinTech Nexus | Loan Analytics",
     layout="wide",
     page_icon="🏦",
-    initial_sidebar_state="collapsed" # Collapsed since we moved nav to top
+    initial_sidebar_state="collapsed"
 )
 
-# --- 🎨 FINTECH ULTRA THEME (With Top Nav Styles) ---
+# --- 🎨 NEW THEME: MIDNIGHT PURPLE & EMERALD ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap');
     
     :root {
         --primary: #10b981;   /* Emerald Green */
-        --secondary: #3b82f6; /* Blue */
+        --secondary: #8b5cf6; /* Violet */
         --accent: #f59e0b;    /* Gold */
-        --bg-dark: #0f172a;   /* Slate 900 */
-        --card-bg: rgba(30, 41, 59, 0.5); /* Slate 800 glass */
+        --bg-dark: #0f0c29;   /* Deep Midnight */
+        --card-bg: rgba(20, 20, 40, 0.6); 
     }
 
-    /* BACKGROUND */
+    /* ANIMATED BACKGROUND */
     .stApp {
         background-color: var(--bg-dark);
         background-image: 
-            radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%), 
-            radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%);
+            linear-gradient(30deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        background-attachment: fixed;
         font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    /* Background Particles Effect */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        top: 0; 
+        left: 0;
+        width: 100%; 
+        height: 100%;
+        background-image: 
+            radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%), 
+            radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
+        z-index: -1;
+        animation: float 10s ease-in-out infinite alternate;
+    }
+    
+    @keyframes float {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.1); }
     }
 
     /* 🔮 GLASS CARDS */
     .glass-card {
         background: var(--card-bg);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 16px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
         padding: 24px;
         margin-bottom: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s ease, border-color 0.2s ease;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
     .glass-card:hover {
-        transform: translateY(-4px);
-        border-color: var(--primary);
-        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+        transform: translateY(-5px);
+        border-color: var(--secondary);
+        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.2);
     }
 
     /* METRICS */
     .metric-val {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+        font-size: 2.8rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #e0e7ff 0%, #a78bfa 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
     
     .metric-label {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         color: #94a3b8;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.2px;
         font-weight: 600;
+        margin-bottom: 5px;
     }
 
     /* BUTTONS */
     .stButton > button {
-        background: linear-gradient(135deg, var(--primary) 0%, #059669 100%);
+        background: linear-gradient(90deg, #7c3aed, #db2777);
         color: white;
         border: none;
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
         width: 100%;
         transition: all 0.3s;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        box-shadow: 0 4px 15px rgba(219, 39, 119, 0.3);
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(219, 39, 119, 0.5);
     }
 
     /* HEADERS */
     h1, h2, h3 { color: white !important; }
     
     .gradient-text {
-        background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+        background: linear-gradient(135deg, #a78bfa 0%, #34d399 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
         font-size: 3rem;
+        text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
     }
 
     /* TOP TABS STYLING */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 24px;
+        gap: 20px;
         background-color: transparent;
+        padding: 10px 0;
     }
 
     .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        white-space: pre-wrap;
-        background-color: rgba(30, 41, 59, 0.5);
-        border-radius: 10px;
-        color: #94a3b8;
+        height: 55px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        color: #cbd5e1;
         font-weight: 600;
         border: 1px solid rgba(255,255,255,0.05);
-        padding: 0 20px;
+        padding: 0 25px;
+        transition: all 0.3s;
     }
 
     .stTabs [aria-selected="true"] {
-        background-color: rgba(16, 185, 129, 0.2) !important;
-        color: #34d399 !important;
-        border: 1px solid #10b981 !important;
+        background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(219, 39, 119, 0.3)) !important;
+        color: #fff !important;
+        border: 1px solid #a78bfa !important;
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
     }
 
-    /* SIDEBAR (NOW JUST FOR FILTERS) */
+    /* SIDEBAR */
     section[data-testid="stSidebar"] {
-        background: rgba(15, 23, 42, 0.9);
+        background: rgba(15, 12, 41, 0.95);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
     
@@ -160,10 +186,10 @@ if df is not None:
     # --- HEADER SECTION ---
     c_logo, c_title = st.columns([1, 6])
     with c_logo:
-        st.markdown("<h1 style='text-align: center; font-size: 4rem;'>🏦</h1>", unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; font-size: 3.5rem;'>💸</h1>", unsafe_allow_html=True)
     with c_title:
-        st.markdown("<h1 style='margin-bottom: 0; color: #10b981;'>FinTech Nexus</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='color: #64748b; font-size: 1.2rem;'>Advanced Loan Intelligence System</p>", unsafe_allow_html=True)
+        st.markdown("<h1 style='margin-bottom: 0; color: #a78bfa;'>FinTech Nexus</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #94a3b8; font-size: 1.1rem; letter-spacing: 1px;'>NEXT-GEN FINANCIAL INTELLIGENCE</p>", unsafe_allow_html=True)
 
     st.markdown("---")
 
@@ -180,7 +206,7 @@ if df is not None:
         
         st.info(f"📁 Analyzing {len(df_filtered)} applications")
         st.markdown("---")
-        st.caption("FinTech Nexus v1.2")
+        st.caption("FinTech Nexus v2.0 | Ultra Edition")
 
     # --- TAB 1: EXECUTIVE DASHBOARD ---
     with tab1:
@@ -195,19 +221,19 @@ if df is not None:
         total_loan = df_filtered['LoanAmount'].sum()
         credit_ok = len(df_filtered[df_filtered['Credit_History'] == 1])
         
-        def card(col, label, val, sub, color="#10b981"):
+        def card(col, label, val, sub, color="#8b5cf6"):
             with col:
                 st.markdown(f"""
-                <div class="glass-card" style="border-top: 3px solid {color}; text-align: center;">
+                <div class="glass-card" style="border-bottom: 4px solid {color}; text-align: center;">
                     <div class="metric-label">{label}</div>
                     <div class="metric-val">${val}</div>
-                    <div style="color: #64748b; font-size: 0.8rem;">{sub}</div>
+                    <div style="color: #94a3b8; font-size: 0.8rem;">{sub}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
-        card(k1, "Avg Income", f"{avg_income:,.0f}", "Monthly Applicant Income")
+        card(k1, "Avg Income", f"{avg_income:,.0f}", "Monthly Applicant Income", "#8b5cf6")
         card(k2, "Total Loan Request", f"{total_loan:,.0f}k", "Cumulative Amount", "#3b82f6")
-        card(k3, "Credit Worthy", f"{credit_ok}", "History = 1.0", "#f59e0b")
+        card(k3, "Credit Worthy", f"{credit_ok}", "History = 1.0", "#10b981")
         card(k4, "Applications", f"{len(df_filtered)}", "Total Processed", "#ec4899")
 
         # CHARTS
@@ -217,7 +243,8 @@ if df is not None:
             st.markdown("### 🏠 Property Area Distribution")
             fig_pie = px.pie(df_filtered, names='Property_Area', hole=0.6, 
                              color_discrete_sequence=['#10b981', '#3b82f6', '#f59e0b'])
-            fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', font_color='white', showlegend=True)
+            fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', font_color='white', showlegend=True,
+                                  legend=dict(orientation="h", y=-0.1))
             st.plotly_chart(fig_pie, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
             
@@ -241,7 +268,7 @@ if df is not None:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             st.markdown("### 🎓 Education vs Income")
             fig_bar = px.box(df_filtered, x='Education', y='ApplicantIncome', color='Education',
-                             color_discrete_sequence=['#3b82f6', '#10b981'])
+                             color_discrete_sequence=['#8b5cf6', '#10b981'])
             fig_bar.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white')
             st.plotly_chart(fig_bar, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
@@ -249,7 +276,7 @@ if df is not None:
         with c2:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
             st.markdown("### 👫 Gender Split")
-            fig_gen = px.bar(df_filtered['Gender'].value_counts(), orientation='h', color_discrete_sequence=['#f59e0b'])
+            fig_gen = px.bar(df_filtered['Gender'].value_counts(), orientation='h', color_discrete_sequence=['#db2777'])
             fig_gen.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color='white', showlegend=False)
             st.plotly_chart(fig_gen, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
@@ -301,9 +328,9 @@ if df is not None:
                 status_text = "APPROVED" if approved else "REJECTED"
                 
                 st.markdown(f"""
-                <div class="glass-card" style="text-align:center; border: 2px solid {status_color};">
-                    <h2 style="color:{status_color}; margin:0;">LOAN {status_text}</h2>
-                    <h1 style="font-size: 4rem; margin: 10px 0; color: white;">{prob:.1f}%</h1>
+                <div class="glass-card" style="text-align:center; border: 2px solid {status_color}; box-shadow: 0 0 30px {status_color}40;">
+                    <h2 style="color:{status_color}; margin:0; letter-spacing: 2px;">LOAN {status_text}</h2>
+                    <h1 style="font-size: 5rem; margin: 10px 0; color: white; text-shadow: 0 0 20px {status_color}80;">{prob:.1f}%</h1>
                     <p style="color:#94a3b8;">Approval Probability Score</p>
                     <hr style="background:rgba(255,255,255,0.1);">
                     <div style="display:flex; justify-content:space-around;">
