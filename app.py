@@ -118,10 +118,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATA LOADER ---
+# --- DATA LOADER (UPDATED FILENAME) ---
 @st.cache_data
 def load_data():
-    file_path = 'test_Y3wMUE5_7gLdaTN (1).csv'
+    # UPDATED FILE NAME HERE
+    file_path = '_AI_project_data.csv'
     try:
         df = pd.read_csv(file_path)
         
@@ -303,4 +304,4 @@ if df is not None:
                 st.info("👈 Enter applicant details to run the AI assessment.")
 
 else:
-    st.error("🚨 Please upload 'test_Y3wMUE5_7gLdaTN (1).csv' to view the dashboard.")
+    st.error("🚨 Please upload '_AI_project_data.csv' to view the dashboard.")
