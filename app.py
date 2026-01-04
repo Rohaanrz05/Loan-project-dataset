@@ -305,7 +305,7 @@ if df is not None:
         st.dataframe(df_filtered, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- TAB 3: LOAN PREDICTOR ---
+# --- TAB 3: LOAN PREDICTOR ---
     with tab3:
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='gradient-text'>SMART PREDICTOR</div>", unsafe_allow_html=True)
@@ -346,7 +346,7 @@ if df is not None:
                 status_color = "#00ff9d" if approved else "#ff4b4b"
                 status_text = "APPROVED" if approved else "REJECTED"
                 
-                st.markdown(f"""
+                result_html = f"""
                 <div class="glass-card" style="text-align:center; border: 2px solid {status_color}; box-shadow: 0 0 50px {status_color}20;">
                     <h2 style="color:{status_color} !important; letter-spacing: 4px; margin-bottom: 10px;">LOAN {status_text}</h2>
                     <h1 style="font-size: 5rem; margin: 0; color: white;">{prob:.1f}%</h1>
@@ -363,9 +363,12 @@ if df is not None:
                         </div>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """
+                
+                st.markdown(result_html, unsafe_allow_html=True)
             else:
                 st.info("👈 Enter applicant details to run the AI assessment.")
 
 else:
     st.error("🚨 Please check the data source.")
+
