@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import numpy as np
 
 # --- PAGE CONFIG ---
@@ -152,27 +151,27 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATA LOADER ---
+# --- DATA LOADER (AUTO-GENERATED) ---
 @st.cache_data
 def load_data():
-    file_path = '_AI_project_data.csv'
-    try:
-        df = pd.read_csv(file_path)
-        
-        # Data Cleaning
-        num_cols = ['ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term', 'Credit_History']
-        for col in num_cols:
-            if col in df.columns:
-                df[col] = df[col].fillna(df[col].mean())
-                
-        cat_cols = ['Gender', 'Married', 'Dependents', 'Self_Employed']
-        for col in cat_cols:
-            if col in df.columns:
-                df[col] = df[col].fillna(df[col].mode()[0])
-                
-        return df
-    except:
-        return None
+    # This generates random data so the app works without needing a CSV file
+    np.random.seed(42)
+    data_size = 500
+    
+    data = {
+        'ApplicantIncome': np.random.randint(2500, 20000, data_size),
+        'CoapplicantIncome': np.random.randint(0, 10000, data_size),
+        'LoanAmount': np.random.randint(50, 600, data_size),
+        'Loan_Amount_Term': np.random.choice([360, 180, 480], data_size),
+        'Credit_History': np.random.choice([1.0, 0.0], data_size, p=[0.8, 0.2]),
+        'Gender': np.random.choice(['Male', 'Female'], data_size),
+        'Married': np.random.choice(['Yes', 'No'], data_size),
+        'Dependents': np.random.choice(['0', '1', '2', '3+'], data_size),
+        'Self_Employed': np.random.choice(['Yes', 'No'], data_size, p=[0.15, 0.85]),
+        'Education': np.random.choice(['Graduate', 'Not Graduate'], data_size, p=[0.8, 0.2]),
+        'Property_Area': np.random.choice(['Urban', 'Semiurban', 'Rural'], data_size)
+    }
+    return pd.DataFrame(data)
 
 df = load_data()
 
@@ -369,4 +368,4 @@ if df is not None:
                 st.info("👈 Enter applicant details to run the AI assessment.")
 
 else:
-    st.error("🚨 Please upload '_AI_project_data.csv' to view the dashboard.")
+    st.error("🚨 Please check the data source.")
