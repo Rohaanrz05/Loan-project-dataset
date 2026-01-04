@@ -9,10 +9,10 @@ st.set_page_config(
     page_title="FinTech Nexus | Loan Analytics",
     layout="wide",
     page_icon="🏦",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed" # Collapsed since we moved nav to top
 )
 
-# --- 🎨 FINTECH ULTRA THEME ---
+# --- 🎨 FINTECH ULTRA THEME (With Top Nav Styles) ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400&display=swap');
@@ -98,42 +98,51 @@ st.markdown("""
         font-size: 3rem;
     }
 
-    /* SIDEBAR */
+    /* TOP TABS STYLING */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 24px;
+        background-color: transparent;
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: rgba(30, 41, 59, 0.5);
+        border-radius: 10px;
+        color: #94a3b8;
+        font-weight: 600;
+        border: 1px solid rgba(255,255,255,0.05);
+        padding: 0 20px;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background-color: rgba(16, 185, 129, 0.2) !important;
+        color: #34d399 !important;
+        border: 1px solid #10b981 !important;
+    }
+
+    /* SIDEBAR (NOW JUST FOR FILTERS) */
     section[data-testid="stSidebar"] {
         background: rgba(15, 23, 42, 0.9);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
     
-    /* CUSTOM TAGS */
-    .tag {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-right: 5px;
-    }
-    .tag-green { background: rgba(16, 185, 129, 0.2); color: #34d399; }
-    .tag-blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
     </style>
 """, unsafe_allow_html=True)
 
-# --- DATA LOADER (UPDATED FILENAME) ---
+# --- DATA LOADER ---
 @st.cache_data
 def load_data():
-    # UPDATED FILE NAME HERE
     file_path = '_AI_project_data.csv'
     try:
         df = pd.read_csv(file_path)
         
         # Data Cleaning (Imputation)
-        # Fill Numeric with Mean
         num_cols = ['ApplicantIncome', 'CoapplicantIncome', 'LoanAmount', 'Loan_Amount_Term', 'Credit_History']
         for col in num_cols:
             if col in df.columns:
                 df[col] = df[col].fillna(df[col].mean())
                 
-        # Fill Categorical with Mode
         cat_cols = ['Gender', 'Married', 'Dependents', 'Self_Employed']
         for col in cat_cols:
             if col in df.columns:
@@ -148,25 +157,34 @@ df = load_data()
 # --- APP ---
 if df is not None:
     
-    # --- SIDEBAR ---
+    # --- HEADER SECTION ---
+    c_logo, c_title = st.columns([1, 6])
+    with c_logo:
+        st.markdown("<h1 style='text-align: center; font-size: 4rem;'>🏦</h1>", unsafe_allow_html=True)
+    with c_title:
+        st.markdown("<h1 style='margin-bottom: 0; color: #10b981;'>FinTech Nexus</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #64748b; font-size: 1.2rem;'>Advanced Loan Intelligence System</p>", unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    # --- TOP NAVIGATION (TABS) ---
+    tab1, tab2, tab3 = st.tabs(["📊 Executive Dashboard", "🔎 Applicant Analysis", "🤖 Loan Predictor"])
+
+    # --- SIDEBAR FILTERS (Global) ---
     with st.sidebar:
-        st.markdown("<h2 style='text-align: center; color: #10b981;'>🏦 FinTech Nexus</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align:center; color:#64748b;'>LOAN INTELLIGENCE SYSTEM</p>", unsafe_allow_html=True)
-        st.markdown("---")
-        
-        menu = st.radio("MENU", ["📊 Executive Dashboard", "🔎 Applicant Analysis", "🤖 Loan Predictor"], label_visibility="collapsed")
-        
-        st.markdown("---")
-        st.markdown("### ⚙️ Filters")
+        st.markdown("### ⚙️ Global Filters")
         prop_area = st.multiselect("Property Area", df['Property_Area'].unique(), default=df['Property_Area'].unique())
         
         # Apply Filter
         df_filtered = df[df['Property_Area'].isin(prop_area)]
         
         st.info(f"📁 Analyzing {len(df_filtered)} applications")
+        st.markdown("---")
+        st.caption("FinTech Nexus v1.2")
 
     # --- TAB 1: EXECUTIVE DASHBOARD ---
-    if menu == "📊 Executive Dashboard":
+    with tab1:
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='gradient-text'>EXECUTIVE OVERVIEW</div>", unsafe_allow_html=True)
         st.write("")
         
@@ -214,7 +232,8 @@ if df is not None:
             st.markdown('</div>', unsafe_allow_html=True)
 
     # --- TAB 2: APPLICANT ANALYSIS ---
-    elif menu == "🔎 Applicant Analysis":
+    with tab2:
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='gradient-text'>APPLICANT INSIGHTS</div>", unsafe_allow_html=True)
         
         c1, c2 = st.columns([2, 1])
@@ -241,7 +260,8 @@ if df is not None:
         st.markdown('</div>', unsafe_allow_html=True)
 
     # --- TAB 3: LOAN PREDICTOR ---
-    elif menu == "🤖 Loan Predictor":
+    with tab3:
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='gradient-text'>SMART PREDICTOR</div>", unsafe_allow_html=True)
         st.markdown("<p style='color:#94a3b8;'>AI-Assisted Eligibility Assessment</p>", unsafe_allow_html=True)
         
@@ -261,22 +281,20 @@ if df is not None:
             
         with c_out:
             if check:
-                # SIMPLE RULE-BASED LOGIC (Since we lack training data)
-                # Credit History is the strongest predictor in finance
+                # SIMPLE RULE-BASED LOGIC
                 cred_score = 1.0 if "1.0" in u_cred else 0.0
                 total_income = u_income + u_coincome
                 ratio = u_loan / (total_income/1000) if total_income > 0 else 100
                 
-                # Logic: Good Credit AND Reasonable Loan-to-Income
                 approved = False
                 if cred_score == 1.0 and ratio < 50:
                     approved = True
-                    prob = np.random.uniform(75, 95) # Simulating confidence
+                    prob = np.random.uniform(75, 95)
                 elif cred_score == 1.0:
-                    approved = False # Income too low for loan
+                    approved = False
                     prob = np.random.uniform(40, 60)
                 else:
-                    approved = False # Bad Credit
+                    approved = False
                     prob = np.random.uniform(10, 30)
                 
                 status_color = "#10b981" if approved else "#ef4444"
