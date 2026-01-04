@@ -305,7 +305,7 @@ if df is not None:
         st.dataframe(df_filtered, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    # --- TAB 3: LOAN PREDICTOR (FIXED) ---
+    # --- TAB 3: LOAN PREDICTOR (SIMPLIFIED FIX) ---
     with tab3:
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown("<div class='gradient-text'>SMART PREDICTOR</div>", unsafe_allow_html=True)
@@ -345,30 +345,35 @@ if df is not None:
                 
                 status_color = "#00ff9d" if approved else "#ff4b4b"
                 status_text = "APPROVED" if approved else "REJECTED"
+                pass_fail = "PASS" if cred_score == 1 else "FAIL"
+                ratio_color = "#00ff9d" if ratio < 50 else "#ff4b4b"
                 
-                # FIXED: Store HTML in variable first
-                result_html = f"""
+                # WORKING VERSION - Split into smaller pieces
+                st.markdown(f"""
                 <div class="glass-card" style="text-align:center; border: 2px solid {status_color}; box-shadow: 0 0 50px {status_color}20;">
                     <h2 style="color:{status_color} !important; letter-spacing: 4px; margin-bottom: 10px;">LOAN {status_text}</h2>
                     <h1 style="font-size: 5rem; margin: 0; color: white;">{prob:.1f}%</h1>
                     <p style="color:#a1a1aa; text-transform: uppercase; letter-spacing: 2px;">Probability Score</p>
-                    
-                    <div style="margin-top: 30px; display:flex; justify-content:center; gap: 20px;">
-                        <div style="background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 10px;">
-                            <div style="font-size:0.8rem; color:#a1a1aa;">CREDIT CHECK</div>
-                            <div style="font-weight:bold; color:{status_color}; font-size: 1.1rem;">{'PASS' if cred_score==1 else 'FAIL'}</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 10px;">
-                            <div style="font-size:0.8rem; color:#a1a1aa;">RISK RATIO</div>
-                            <div style="font-weight:bold; color:{'#00ff9d' if ratio<50 else '#ff4b4b'}; font-size: 1.1rem;">{ratio:.1f}</div>
-                        </div>
-                    </div>
                 </div>
-                """
+                """, unsafe_allow_html=True)
                 
-                st.markdown(result_html, unsafe_allow_html=True)
+                # Additional metrics in columns
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown(f"""
+                    <div class="glass-card" style="text-align:center; background: rgba(255,255,255,0.05);">
+                        <div style="font-size:0.8rem; color:#a1a1aa;">CREDIT CHECK</div>
+                        <div style="font-weight:bold; color:{status_color}; font-size: 1.5rem; margin-top: 10px;">{pass_fail}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with col2:
+                    st.markdown(f"""
+                    <div class="glass-card" style="text-align:center; background: rgba(255,255,255,0.05);">
+                        <div style="font-size:0.8rem; color:#a1a1aa;">RISK RATIO</div>
+                        <div style="font-weight:bold; color:{ratio_color}; font-size: 1.5rem; margin-top: 10px;">{ratio:.1f}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
             else:
                 st.info("👈 Enter applicant details to run the AI assessment.")
 
-else:
-    st.error("🚨 Please check the data source.")
